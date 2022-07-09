@@ -4,6 +4,7 @@ import bencoding
 
 from lamprey.tracker import Tracker
 
+
 @pytest.fixture(scope='module')
 def torrent_file():
     torrent_dict = {}
@@ -19,8 +20,14 @@ def test_generate_peer_id(mock_randint):
     assert len(actual) == 20
     assert expected == actual
 
+
 def test_generate_info_hash(torrent_file):
     tracker = Tracker(torrent_file)
     actual = tracker._generate_info_hash(torrent_file)
     expected = '9b4c1489bfccd8205d152345f7a8aad52d9a1f57'
     assert expected == actual
+
+def test_connection_to_tracker(torrent_file):
+    tracker = Tracker(torrent_file)
+    response = Tracker.connect(first=True)
+    assert response.status_code == 200
